@@ -19,9 +19,12 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
-wss.on('connection', socket => {
-  socket.on('message', message => {
-    console.log(wss.clients)
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+
+  ws.on('message', (message) => {
+    console.log(message)
+
     // Game Master messages
     if (message.client == "GM") {
       switch (message.type) {
@@ -50,55 +53,14 @@ wss.on('connection', socket => {
           })
           break;
       }
-
-    } else {
-      socket.destroy()
     }
-  });
-});
-wss.on('connection', (ws) => {
-  console.log('Client connected');
+  })
 
-  ws.on('message', (message) => {
-    console.log(message)
-    
-      // Game Master messages
-      if(message.client == "GM") {
-    switch (message.type) {
-      case "start game":
-        wss.send("start game")
-        break
-      case "start levels":
-        wss.send("start levels")
-        break
-      case "":
-    }
-  } // Player messages 
-      else if (message.client == "player") {
-    switch (message.type) {
-      case "connect":
-        wss.send("accepted")
-        break;
-
-      case "items":
-        _.forEach(message.data, (item) => {
-          if (_.includes(itemList, item)) {
-            itemList[item]++
-          } else {
-            itemList[item] = 1
-          }
-        })
-        break;
-    }
-  }
-})
-
-ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => console.log('Client disconnected'));
 });
 
 setInterval(() => {
   wss.clients.forEach((client) => {
-    console.log(JSON.stringify(client))
     client.send(new Date().toTimeString());
   });
 }, 1000);
