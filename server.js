@@ -24,7 +24,7 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (message) => {
     console.log(message)
-
+    console.log(JSON.parse(message))
     // Game Master messages
     if (message.client == "GM") {
       switch (message.type) {
