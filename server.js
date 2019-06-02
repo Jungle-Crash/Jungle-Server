@@ -19,7 +19,9 @@ let itemList = []
 let playerList = {}
 
 wss.on('connection', (ws) => {
+  console.log('Client Connected')
   ws.on('message', (message) => {
+    console.log('Client message')
     const msg = JSON.parse(message)
 
     // Game Master messages
