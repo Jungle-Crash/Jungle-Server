@@ -32,7 +32,11 @@ wss.on('connection', (ws) => {
       switch (msg.type) {
         case "login":
           console.log(msg)
-          ws.send('login confirmed')
+          if (msg.data.username === "test" && msg.data.password === "testing"){
+            ws.send('login confirmed')
+          } else {
+            ws.send('login denied')
+          }
           break
 
           case "start game":
