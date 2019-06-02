@@ -57,6 +57,9 @@ wss.on('connection', (ws) => {
           })
           break
       }
+    } else {
+      console.log("Unauthorized Connection")
+      ws.close()
     }
 
   })
