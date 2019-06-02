@@ -57,7 +57,7 @@ wss.on('connection', (ws) => {
   ws.on('close', () => console.log('Client disconnected'));
 });
 
-sendAllPlayers = (msg) => {
+function sendAllPlayers(msg) {
   playerList.forEach((client) => {
     client.send(msg);
   });
