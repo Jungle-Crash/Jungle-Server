@@ -27,26 +27,26 @@ wss.on('connection', (ws) => {
     console.log(msg)
 
     // Game Master messages
-    if (message.client == "GM") {
+    if (msg.client == "GM") {
       console.log("reached")
-      switch (message.type) {
+      switch (msg.type) {
         case "login":
-          console.log(message)
+          console.log(msg)
           this.sendAllPlayers('login confirmed')
           case "start game":
           this.sendAllPlayers('start game')
           break
       }
     } // Player messages 
-    else if (message.client == "player") {
-      switch (message.type) {
+    else if (msg.client == "player") {
+      switch (msg.type) {
         case "login":
           playerList[msg.username] = client
           ws.send("accepted")
           break;
 
         case "items":
-          _.forEach(message.data, (item) => {
+          _.forEach(msg.data, (item) => {
             if (_.includes(itemList, item)) {
               itemList[item]++
             } else {
