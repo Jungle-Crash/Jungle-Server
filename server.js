@@ -23,11 +23,12 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     console.log('Client message')
     
-    console.log(message)
     const msg = JSON.parse(message)
+    console.log(msg)
 
     // Game Master messages
     if (message.client == "GM") {
+      console.log("reached")
       switch (message.type) {
         case "login":
           console.log(message)
