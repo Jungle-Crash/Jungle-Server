@@ -32,9 +32,11 @@ wss.on('connection', (ws) => {
       switch (msg.type) {
         case "login":
           console.log(msg)
-          this.sendAllPlayers('login confirmed')
+          sendAllPlayers('login confirmed')
+          break
+
           case "start game":
-          this.sendAllPlayers('start game')
+          sendAllPlayers('start game')
           break
       }
     } // Player messages 
@@ -43,7 +45,7 @@ wss.on('connection', (ws) => {
         case "login":
           playerList[msg.username] = client
           ws.send("accepted")
-          break;
+          break
 
         case "items":
           _.forEach(msg.data, (item) => {
@@ -53,7 +55,7 @@ wss.on('connection', (ws) => {
               itemList[item] = 1
             }
           })
-          break;
+          break
       }
     }
 
