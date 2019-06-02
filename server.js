@@ -17,7 +17,7 @@ const wss = new SocketServer({ server });
 // Global variables
 let itemList = []
 let playerList = {}
-
+let token = "";
 wss.on('connection', (ws) => {
   console.log('Client Connected')
   ws.on('message', (message) => {
@@ -34,10 +34,11 @@ wss.on('connection', (ws) => {
           console.log(msg)
           if (msg.data.username === "test" && msg.data.password === "testing"){
             console.log('login confirmed')
+            token = "test_token"
             ws.send(JSON.stringify({
               source: "Server",
               type: 'login confirmed',
-              data: {token: ''}
+              data: {token: token}
             }))
           } else {
             console.log('login denied')
