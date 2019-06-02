@@ -22,6 +22,8 @@ wss.on('connection', (ws) => {
   console.log('Client Connected')
   ws.on('message', (message) => {
     console.log('Client message')
+    
+    console.log(message)
     const msg = JSON.parse(message)
 
     // Game Master messages
