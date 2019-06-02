@@ -33,8 +33,10 @@ wss.on('connection', (ws) => {
         case "login":
           console.log(msg)
           if (msg.data.username === "test" && msg.data.password === "testing"){
+            console.log('login confirmed')
             ws.send('login confirmed')
           } else {
+            console.log('login denied')
             ws.send('login denied')
           }
           break
