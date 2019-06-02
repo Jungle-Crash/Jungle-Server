@@ -27,14 +27,18 @@ wss.on('connection', (ws) => {
     console.log(msg)
 
     // Game Master messages
-    if (msg.client == "GM") {
+    if (msg.source == "GM") {
       console.log("reached")
       switch (msg.type) {
         case "login":
           console.log(msg)
           if (msg.data.username === "test" && msg.data.password === "testing"){
             console.log('login confirmed')
-            ws.send('login confirmed')
+            ws.send(JSON.stringify({
+              source: "Server",
+              type: 'login confirmed',
+              data: {token: ''}
+            }))
           } else {
             console.log('login denied')
             ws.send('login denied')
@@ -46,7 +50,7 @@ wss.on('connection', (ws) => {
           break
       }
     } // Player messages 
-    else if (msg.client == "player") {
+    else if (msg.source == "player") {
       switch (msg.type) {
         case "login":
           playerList[msg.username] = client
