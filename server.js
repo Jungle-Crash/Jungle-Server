@@ -27,7 +27,8 @@ wss.on('connection', (ws) => {
       switch (message.type) {
         case "login":
           console.log(message)
-        case "start game":
+          sendAllPlayers('login confirmed')
+          case "start game":
           sendAllPlayers('start game')
           break
       }
