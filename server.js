@@ -3,15 +3,10 @@
 const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
+const _ = require('lodash');
 
 const PORT = process.env.PORT || 3001;
 const INDEX = path.join(__dirname, 'index.html');
-
-const _ = require('lodash');
-
-// Global variables
-let itemList = []
-let users = []
 
 const server = express()
   .use((req, res) => res.sendFile(INDEX))
@@ -19,28 +14,29 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
-wss.on('connection', (ws) => {
-  console.log('Client connected');
+// Global variables
+let itemList = []
+let playerList = {}
 
+wss.on('connection', (ws) => {
   ws.on('message', (message) => {
-    console.log(message)
-    console.log(JSON.parse(message))
+    const msg = JSON.parse(message)
+
     // Game Master messages
     if (message.client == "GM") {
       switch (message.type) {
+        case "login":
+          console.log(message)
         case "start game":
-          wss.send("start game")
+          sendAllPlayers('start game')
           break
-        case "start levels":
-          wss.send("start levels")
-          break
-        case "":
       }
     } // Player messages 
     else if (message.client == "player") {
       switch (message.type) {
-        case "connect":
-          wss.send("accepted")
+        case "login":
+          playerList[msg.username] = client
+          ws.send("accepted")
           break;
 
         case "items":
@@ -54,13 +50,14 @@ wss.on('connection', (ws) => {
           break;
       }
     }
+
   })
 
   ws.on('close', () => console.log('Client disconnected'));
 });
 
-setInterval(() => {
-  wss.clients.forEach((client) => {
-    client.send(new Date().toTimeString());
+sendAllPlayers = (msg) => {
+  playerList.forEach((client) => {
+    client.send(msg);
   });
-}, 1000);
+}
