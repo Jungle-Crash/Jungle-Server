@@ -37,7 +37,7 @@ wss.on('connection', (ws) => {
           if (msg.data.username === "test" && msg.data.password === "testing"){
             console.log('login confirmed')
             token = "test_token"
-            ws.send(msg('login confirmed', {token: token}))
+            ws.send(createMsg('login confirmed', {token: token}))
           } else {
             console.log('login denied')
             ws.send('login denied')
@@ -66,7 +66,7 @@ function handlePlayerMsg(ws, msg) {
   switch (msg.type) {
     case "login":
       playerList[msg.data.username] = wss
-      ws.send(msg('login confirmed', {username: msg.data.username}))
+      ws.send(createMsg('login confirmed', {username: msg.data.username}))
       break
 
     case "items":
@@ -86,7 +86,7 @@ function sendAllPlayers(msg) {
   });
 }
 
-function msg(type, data) {
+function createMsg(type, data) {
   return JSON.stringify({
     source: "Server",
     type: type,
