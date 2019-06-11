@@ -14,13 +14,7 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
-function msg(type, data) {
-  return JSON.stringify({
-    source: "Server",
-    type: type,
-    data: data
-  })
-} 
+
 
 // Global variables
 let itemList = []
@@ -57,22 +51,7 @@ wss.on('connection', (ws) => {
     } // Player messages 
     else if (msg.source == "player") {
       console.log("Player")
-      switch (msg.type) {
-        case "login":
-          playerList[msg.data.username] = wss
-          ws.send(this.msg('login confirmed', {username: msg.data.username}))
-          break
-
-        case "items":
-          _.forEach(msg.data, (item) => {
-            if (_.includes(itemList, item)) {
-              itemList[item]++
-            } else {
-              itemList[item] = 1
-            }
-          })
-          break
-      }
+      handlePlayerMsg(msg)
     } else {
       console.log("Unauthorized Connection")
       ws.close()
@@ -83,8 +62,34 @@ wss.on('connection', (ws) => {
   ws.on('close', () => console.log('Client disconnected'));
 });
 
+function handlePlayerMsg(msg) {
+  switch (msg.type) {
+    case "login":
+      playerList[msg.data.username] = wss
+      ws.send(msg('login confirmed', {username: msg.data.username}))
+      break
+
+    case "items":
+      _.forEach(msg.data, (item) => {
+        if (_.includes(itemList, item)) {
+          itemList[item]++
+        } else {
+          itemList[item] = 1
+        }
+      })
+      break
+  }
+}
 function sendAllPlayers(msg) {
   playerList.forEach((client) => {
     client.send(msg);
   });
 }
+
+function msg(type, data) {
+  return JSON.stringify({
+    source: "Server",
+    type: type,
+    data: data
+  })
+} 
