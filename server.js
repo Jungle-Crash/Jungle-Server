@@ -60,7 +60,7 @@ wss.on('connection', (ws) => {
       switch (msg.type) {
         case "login":
           playerList[msg.data.username] = wss
-          ws.send(msg('login confirmed', {username: msg.data.username}))
+          ws.send(this.msg('login confirmed', {username: msg.data.username}))
           break
 
         case "items":
