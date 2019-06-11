@@ -14,6 +14,14 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
+function msg(type, data) {
+  return JSON.stringify({
+    source: "Server",
+    type: type,
+    data: data
+  })
+} 
+
 // Global variables
 let itemList = []
 let playerList = {}
@@ -35,11 +43,7 @@ wss.on('connection', (ws) => {
           if (msg.data.username === "test" && msg.data.password === "testing"){
             console.log('login confirmed')
             token = "test_token"
-            ws.send(JSON.stringify({
-              source: "Server",
-              type: 'login confirmed',
-              data: {token: token}
-            }))
+            ws.send(msg('login confirmed', {token: token}))
           } else {
             console.log('login denied')
             ws.send('login denied')
@@ -56,7 +60,7 @@ wss.on('connection', (ws) => {
       switch (msg.type) {
         case "login":
           playerList[msg.data.username] = wss
-          ws.send("accepted")
+          ws.send(msg('login confirmed', {username: msg.data.username}))
           break
 
         case "items":
