@@ -55,8 +55,8 @@ wss.on('connection', (ws) => {
       console.log("Player")
       switch (msg.type) {
         case "login":
-          print(message)
-          print(ws.client)
+          console.log(message)
+          console.log(ws.client)
           playerList[msg.username] = client
           ws.send("accepted")
           break
