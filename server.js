@@ -55,8 +55,7 @@ wss.on('connection', (ws) => {
       console.log("Player")
       switch (msg.type) {
         case "login":
-          console.log(message)
-          console.log(ws.client)
+          const client = request.accept('echo-protocol', request.origin);
           playerList[msg.username] = client
           ws.send("accepted")
           break
