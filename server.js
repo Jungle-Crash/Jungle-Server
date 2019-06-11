@@ -51,7 +51,7 @@ wss.on('connection', (ws) => {
     } // Player messages 
     else if (msg.source == "player") {
       console.log("Player")
-      handlePlayerMsg(msg)
+      handlePlayerMsg(ws, msg)
     } else {
       console.log("Unauthorized Connection")
       ws.close()
@@ -62,7 +62,7 @@ wss.on('connection', (ws) => {
   ws.on('close', () => console.log('Client disconnected'));
 });
 
-function handlePlayerMsg(msg) {
+function handlePlayerMsg(ws, msg) {
   switch (msg.type) {
     case "login":
       playerList[msg.data.username] = wss
