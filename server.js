@@ -28,7 +28,7 @@ wss.on('connection', (ws) => {
 
     // Game Master messages
     if (msg.source == "GM") {
-      console.log("reached")
+      console.log("GM")
       switch (msg.type) {
         case "login":
           console.log(msg)
@@ -52,8 +52,10 @@ wss.on('connection', (ws) => {
       }
     } // Player messages 
     else if (msg.source == "player") {
+      console.log("Player")
       switch (msg.type) {
         case "login":
+          print(message)
           playerList[msg.username] = client
           ws.send("accepted")
           break
